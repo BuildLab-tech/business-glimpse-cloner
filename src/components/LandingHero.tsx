@@ -42,9 +42,9 @@ const LandingHero: React.FC = () => {
             <div className="p-4 sm:p-3">
               <Button 
                 type="submit"
-                className="w-full sm:w-auto bg-amber-400 hover:bg-amber-500 text-amber-900 font-medium text-lg py-6 px-6 rounded-lg transition-all"
+                className="w-full sm:w-auto bg-amber-400 hover:bg-amber-500 text-amber-900 font-medium text-lg py-6 px-8 rounded-lg transition-all"
               >
-                <Sparkles className="mr-2 h-5 w-5" />
+                <Sparkles className="mr-2 h-6 w-6" />
                 Generate website
               </Button>
             </div>
