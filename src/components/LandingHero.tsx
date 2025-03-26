@@ -18,12 +18,13 @@ const LandingHero: React.FC = () => {
     <div className="w-full flex flex-col items-center justify-center px-4 sm:px-6 animate-fade-in">
       <div className="text-center max-w-4xl mx-auto">
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight animate-fade-up">
-          AI that builds a<br />website for you.
+          3 Clicks to Your Dream Website:<br />AI Website Builder Makes it Happen!
         </h1>
         
         <p className="text-xl md:text-2xl text-white/80 mb-12 max-w-3xl mx-auto animate-fade-up animate-delay-100">
-          Get your business online in 30 seconds with the<br className="hidden md:block" />
-          #1 AI website builder and marketing platform.
+          Live the future of website building today with simpo.ai<br className="hidden md:block" />
+          the ai powered website builder that Instantly Craft SEO-Friendly,<br className="hidden md:block" />
+          Responsive Websites with High-Quality Content
         </p>
         
         <div className="w-full max-w-xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden animate-fade-up animate-delay-200">
