@@ -22,7 +22,7 @@ const Logo: React.FC<LogoProps> = ({ className }) => {
         <path d="M8 16C8 11.5817 11.5817 8 16 8C20.4183 8 24 11.5817 24 16C24 20.4183 20.4183 24 16 24" stroke="#FF9D00" strokeWidth="2" strokeLinecap="round" />
         <path d="M16 24C13.7909 24 12 22.2091 12 20C12 17.7909 13.7909 16 16 16C18.2091 16 20 17.7909 20 20C20 22.2091 18.2091 24 16 24Z" fill="#FF9D00" stroke="#FF9D00" strokeWidth="2" />
       </svg>
-      <span className="ml-2 text-xl font-bold text-white">Simpo.ai</span>
+      <span className="ml-2 text-xl font-bold text-gray-800">Simpo.ai</span>
     </div>
   );
 };
@@ -35,23 +35,23 @@ const LandingHeader: React.FC = () => {
   };
 
   return (
-    <header className="w-full py-4 px-8 bg-black shadow-md" style={{ backgroundColor: '#000000' }}>
+    <header className="w-full py-4 px-8 bg-white shadow-md" style={{ backgroundColor: '#f8f9fa' }}>
       <div className="max-w-screen-xl mx-auto">
         <div className="flex items-center justify-between">
           <Logo />
           
           <div className="hidden md:flex items-center space-x-8">
             <nav className="flex items-center space-x-8">
-              <Link to="/pricing" className="text-white hover:text-gray-300 transition-colors">
+              <Link to="/pricing" className="text-gray-700 hover:text-gray-900 transition-colors">
                 Pricing
               </Link>
-              <Link to="/blogs" className="text-white hover:text-gray-300 transition-colors">
+              <Link to="/blogs" className="text-gray-700 hover:text-gray-900 transition-colors">
                 Blogs
               </Link>
-              <Link to="/contact" className="text-white hover:text-gray-300 transition-colors">
+              <Link to="/contact" className="text-gray-700 hover:text-gray-900 transition-colors">
                 Contact Us
               </Link>
-              <Link to="/signin" className="text-white hover:text-gray-300 transition-colors border-l pl-6 ml-2">
+              <Link to="/signin" className="text-gray-700 hover:text-gray-900 transition-colors border-l pl-6 ml-2">
                 Sign in
               </Link>
             </nav>
@@ -67,7 +67,7 @@ const LandingHeader: React.FC = () => {
           </div>
           
           <div className="md:hidden">
-            <Button variant="ghost" className="text-white" onClick={toggleMenu}>
+            <Button variant="ghost" className="text-gray-700" onClick={toggleMenu}>
               {isMenuOpen ? (
                 <X size={24} />
               ) : (
@@ -78,18 +78,18 @@ const LandingHeader: React.FC = () => {
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden mt-4 py-4 bg-black border-t border-gray-800">
+          <div className="md:hidden mt-4 py-4 bg-white border-t border-gray-100">
             <nav className="flex flex-col space-y-4">
-              <Link to="/pricing" className="text-white hover:text-gray-300 transition-colors">
+              <Link to="/pricing" className="text-gray-700 hover:text-gray-900 transition-colors">
                 Pricing
               </Link>
-              <Link to="/blogs" className="text-white hover:text-gray-300 transition-colors">
+              <Link to="/blogs" className="text-gray-700 hover:text-gray-900 transition-colors">
                 Blogs
               </Link>
-              <Link to="/contact" className="text-white hover:text-gray-300 transition-colors">
+              <Link to="/contact" className="text-gray-700 hover:text-gray-900 transition-colors">
                 Contact Us
               </Link>
-              <Link to="/signin" className="text-white hover:text-gray-300 transition-colors">
+              <Link to="/signin" className="text-gray-700 hover:text-gray-900 transition-colors">
                 Sign in
               </Link>
               <Button 
