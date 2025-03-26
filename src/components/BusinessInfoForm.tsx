@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ChevronLeft, ArrowRight, X, Building } from 'lucide-react';
+import { ArrowRight, X, Building } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface BusinessInfoFormProps {
@@ -21,14 +21,6 @@ const BusinessInfoForm: React.FC<BusinessInfoFormProps> = ({ onNext, onBack }) =
             <Building className="h-8 w-8 text-primary" />
           </div>
         </div>
-
-        <button 
-          onClick={onBack}
-          className="text-primary flex items-center mb-4 font-medium hover:underline transition-all"
-        >
-          <ChevronLeft className="h-4 w-4 mr-1" />
-          Back
-        </button>
         
         <h1 className="text-2xl font-bold text-gray-800 mb-2">Tell us about your business</h1>
         <p className="text-gray-600 mb-6">
