@@ -23,7 +23,7 @@ const LocationPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-theme bg-grid">
+    <div className="min-h-screen flex flex-col bg-[#eee] bg-grid">
       <LandingHeader />
       
       <div className="mt-4">

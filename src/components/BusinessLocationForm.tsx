@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MapPin, ChevronLeft, ArrowRight, X, Globe } from 'lucide-react';
+import { MapPin, ChevronLeft, ArrowRight, X, Globe, Locate } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/components/ui/use-toast';
 
 interface BusinessLocationFormProps {
   onNext: () => void;
@@ -12,6 +13,74 @@ interface BusinessLocationFormProps {
 
 const BusinessLocationForm: React.FC<BusinessLocationFormProps> = ({ onNext, onBack }) => {
   const [location, setLocation] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+  
+  const detectLocation = () => {
+    if (!navigator.geolocation) {
+      toast({
+        title: "Error",
+        description: "Geolocation is not supported by your browser",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const response = await fetch(
+            `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=pk.eyJ1IjoibG92YWJsZWRldiIsImEiOiJjbHZ4cTAyY3QwNWQ2MnZvMm9vdG9jOXcyIn0.PefwFjVTANbTTrBe5vcuww&types=address`
+          );
+          
+          const data = await response.json();
+          
+          if (data.features && data.features.length > 0) {
+            const address = data.features[0].place_name;
+            setLocation(address);
+          } else {
+            setLocation(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+          }
+        } catch (error) {
+          console.error("Error getting location:", error);
+          toast({
+            title: "Error",
+            description: "Failed to get your location. Please enter it manually.",
+            variant: "destructive",
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Geolocation error:", error);
+        
+        let errorMessage = "Failed to get your location.";
+        if (error.code === 1) {
+          errorMessage = "Location access denied. Please grant permission or enter location manually.";
+        } else if (error.code === 2) {
+          errorMessage = "Your location is unavailable at the moment.";
+        } else if (error.code === 3) {
+          errorMessage = "Location request timed out.";
+        }
+        
+        toast({
+          title: "Location Error",
+          description: errorMessage,
+          variant: "destructive",
+        });
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  };
   
   return (
     <div className="w-full max-w-md mx-auto bg-white rounded-2xl shadow-lg overflow-hidden animate-fade-up">
@@ -55,12 +124,34 @@ const BusinessLocationForm: React.FC<BusinessLocationFormProps> = ({ onNext, onB
           )}
         </div>
         
+        <div className="flex gap-2 mt-4">
+          <Button
+            type="button"
+            variant="outline"
+            className="flex-1 py-6 border border-gray-300"
+            onClick={detectLocation}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <div className="h-5 w-5 border-2 border-gray-300 border-t-primary rounded-full animate-spin mr-2" />
+                Detecting...
+              </>
+            ) : (
+              <>
+                <Locate className="mr-2 h-5 w-5" />
+                Use my location
+              </>
+            )}
+          </Button>
+        </div>
+        
         <Button 
           onClick={onNext}
-          disabled={!location}
+          disabled={!location || isLoading}
           className={cn(
             "w-full mt-6 py-6 bg-primary hover:bg-primary/90 text-white rounded-lg flex items-center justify-center",
-            !location && "opacity-70 cursor-not-allowed"
+            (!location || isLoading) && "opacity-70 cursor-not-allowed"
           )}
         >
           Next
