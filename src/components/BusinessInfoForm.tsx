@@ -1,17 +1,83 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ArrowRight, X, Building } from 'lucide-react';
+import { ArrowRight, X, Building, Store, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from '@/components/ui/use-toast';
 
 interface BusinessInfoFormProps {
   onNext: () => void;
-  onBack: () => void;
+  onBack?: () => void;
 }
+
+// Keywords that suggest an ecommerce business
+const ECOMMERCE_KEYWORDS = [
+  'shop', 'store', 'retail', 'commerce', 'ecommerce', 'e-commerce', 
+  'sell', 'sales', 'product', 'marketplace', 'merchant', 'clothing', 
+  'fashion', 'jewelry', 'shoes', 'electronics', 'toys', 'gifts', 
+  'furniture', 'bookstore', 'grocery', 'bakery', 'food delivery',
+  'subscription', 'dropshipping'
+];
+
+// Keywords that suggest an informative business
+const INFORMATIVE_KEYWORDS = [
+  'blog', 'news', 'magazine', 'information', 'media', 'agency', 
+  'service', 'law', 'legal', 'consulting', 'advisor', 'coach',
+  'education', 'school', 'university', 'non-profit', 'charity',
+  'foundation', 'church', 'temple', 'mosque', 'religious',
+  'healthcare', 'clinic', 'doctor', 'dentist', 'therapist',
+  'counselor', 'consultant', 'portfolio', 'restaurant'
+];
 
 const BusinessInfoForm: React.FC<BusinessInfoFormProps> = ({ onNext, onBack }) => {
   const [businessType, setBusinessType] = useState('');
+  const [websiteType, setWebsiteType] = useState<'unknown' | 'ecommerce' | 'informative'>('unknown');
+  
+  useEffect(() => {
+    if (!businessType) {
+      setWebsiteType('unknown');
+      return;
+    }
+    
+    const input = businessType.toLowerCase();
+    
+    // Check if input matches any ecommerce keyword
+    const isEcommerce = ECOMMERCE_KEYWORDS.some(keyword => input.includes(keyword));
+    
+    // Check if input matches any informative keyword
+    const isInformative = INFORMATIVE_KEYWORDS.some(keyword => input.includes(keyword));
+    
+    if (isEcommerce && !isInformative) {
+      setWebsiteType('ecommerce');
+    } else if (isInformative && !isEcommerce) {
+      setWebsiteType('informative');
+    } else if (isEcommerce && isInformative) {
+      // If keywords from both categories are detected, prioritize ecommerce
+      setWebsiteType('ecommerce');
+    } else {
+      setWebsiteType('unknown');
+    }
+  }, [businessType]);
+  
+  const handleWebsiteTypeClick = (type: 'ecommerce' | 'informative') => {
+    setWebsiteType(type);
+    toast({
+      title: "Website type selected",
+      description: type === 'ecommerce' 
+        ? "Your site will be set up with ecommerce features." 
+        : "Your site will be set up with informational features.",
+      duration: 3000
+    });
+  };
+  
+  const handleNext = () => {
+    // Store the website type in session storage for later use
+    if (websiteType !== 'unknown') {
+      sessionStorage.setItem('websiteType', websiteType);
+    }
+    onNext();
+  };
   
   return (
     <div className="w-full max-w-md mx-auto bg-white rounded-2xl shadow-lg overflow-hidden animate-fade-up">
@@ -37,7 +103,7 @@ const BusinessInfoForm: React.FC<BusinessInfoFormProps> = ({ onNext, onBack }) =
             value={businessType}
             onChange={(e) => setBusinessType(e.target.value)}
             placeholder="Type of business (e.g., Retail, Restaurant)"
-            className="pl-10 pr-10 py-6 border border-gray-300 rounded-lg w-full focus:border-primary focus:ring-2 focus:ring-primary/20"
+            className="pl-10 pr-10 border border-gray-300 rounded-lg w-full focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
           
           {businessType && (
@@ -50,8 +116,50 @@ const BusinessInfoForm: React.FC<BusinessInfoFormProps> = ({ onNext, onBack }) =
           )}
         </div>
         
+        {businessType && websiteType !== 'unknown' && (
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+            <p className="text-sm text-gray-700 mb-3">
+              Based on your business type, we think you might need a:
+            </p>
+            
+            <div className="flex space-x-3">
+              <Button
+                variant={websiteType === 'ecommerce' ? 'default' : 'outline'}
+                size="sm"
+                className={cn(
+                  "flex-1 flex items-center justify-center",
+                  websiteType === 'ecommerce' && "bg-primary hover:bg-primary/90"
+                )}
+                onClick={() => handleWebsiteTypeClick('ecommerce')}
+              >
+                <Store className="mr-2 h-4 w-4" />
+                E-commerce
+              </Button>
+              
+              <Button
+                variant={websiteType === 'informative' ? 'default' : 'outline'}
+                size="sm"
+                className={cn(
+                  "flex-1 flex items-center justify-center",
+                  websiteType === 'informative' && "bg-primary hover:bg-primary/90"
+                )}
+                onClick={() => handleWebsiteTypeClick('informative')}
+              >
+                <Info className="mr-2 h-4 w-4" />
+                Informative
+              </Button>
+            </div>
+            
+            <p className="text-xs text-gray-500 mt-3">
+              {websiteType === 'ecommerce' 
+                ? "E-commerce website will include product listings, shopping cart, and checkout features."
+                : "Informative website will focus on presenting your content and services clearly to visitors."}
+            </p>
+          </div>
+        )}
+        
         <Button 
-          onClick={onNext}
+          onClick={handleNext}
           disabled={!businessType}
           className={cn(
             "w-full mt-6 py-6 bg-primary hover:bg-primary/90 text-white rounded-lg flex items-center justify-center",
