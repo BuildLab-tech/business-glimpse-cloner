@@ -28,7 +28,7 @@ const Logo: React.FC<LogoProps> = ({ className }) => {
 
 const LandingHeader: React.FC = () => {
   return (
-    <header className="w-full py-4 px-8 bg-black">
+    <header className="w-full py-4 px-8 bg-[#000000] shadow-md">
       <div className="max-w-screen-xl mx-auto">
         <div className="flex items-center justify-between">
           <Logo />
