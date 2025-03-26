@@ -52,8 +52,8 @@ const LandingHeader: React.FC = () => {
               <Link to="/contact" className="text-gray-700 hover:text-gray-900 transition-colors">
                 Contact Us
               </Link>
-              <div className="flex items-center">
-                <span className="text-gray-900 mx-3 font-medium">|</span>
+              <div className="flex items-center justify-center">
+                <div className="mx-4 h-5 w-px bg-gray-900"></div>
                 <Link to="/signin" className="text-gray-700 hover:text-gray-900 transition-colors">
                   Sign in
                 </Link>
@@ -94,7 +94,7 @@ const LandingHeader: React.FC = () => {
                 Contact Us
               </Link>
               <div className="flex items-center py-1">
-                <span className="text-gray-900 mx-2 font-medium">|</span>
+                <div className="mx-3 h-4 w-px bg-gray-900"></div>
                 <Link to="/signin" className="text-gray-700 hover:text-gray-900 transition-colors">
                   Sign in
                 </Link>
