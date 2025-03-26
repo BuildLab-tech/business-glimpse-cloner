@@ -58,7 +58,7 @@ const LandingHeader: React.FC = () => {
             
             <Button 
               asChild 
-              className="bg-blue-500 hover:bg-blue-600 text-white rounded-full py-2 px-6"
+              className="text-white rounded-full py-2 px-6 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 transition-all"
             >
               <Link to="/register/business-info">
                 Generate Website
@@ -94,7 +94,7 @@ const LandingHeader: React.FC = () => {
               </Link>
               <Button 
                 asChild 
-                className="bg-blue-500 hover:bg-blue-600 text-white rounded-full py-2 px-6 w-full mt-2"
+                className="w-full text-white bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 rounded-full py-2 px-6 transition-all"
               >
                 <Link to="/register/business-info">
                   Generate Website
