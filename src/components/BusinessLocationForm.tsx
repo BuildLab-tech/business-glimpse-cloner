@@ -32,23 +32,39 @@ const BusinessLocationForm: React.FC<BusinessLocationFormProps> = ({ onNext, onB
       async (position) => {
         try {
           const { latitude, longitude } = position.coords;
-          const response = await fetch(
-            `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=pk.eyJ1IjoibG92YWJsZWRldiIsImEiOiJjbHZ4cTAyY3QwNWQ2MnZvMm9vdG9jOXcyIn0.PefwFjVTANbTTrBe5vcuww&types=address`
-          );
+          console.log("Location detected:", latitude, longitude);
           
-          const data = await response.json();
-          
-          if (data.features && data.features.length > 0) {
-            const address = data.features[0].place_name;
-            setLocation(address);
-          } else {
+          // Use MapBox Geocoding API to get address from coordinates
+          try {
+            const response = await fetch(
+              `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=pk.eyJ1IjoibG92YWJsZWRldiIsImEiOiJjbHZ4cTAyY3QwNWQ2MnZvMm9vdG9jOXcyIn0.PefwFjVTANbTTrBe5vcuww&types=address`
+            );
+            
+            if (!response.ok) {
+              throw new Error(`Geocoding API error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.features && data.features.length > 0) {
+              const address = data.features[0].place_name;
+              setLocation(address);
+              console.log("Address found:", address);
+            } else {
+              // Fallback to coordinates if no address found
+              setLocation(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+              console.log("No address found, using coordinates");
+            }
+          } catch (error) {
+            console.error("Geocoding error:", error);
+            // Fallback to coordinates if geocoding fails
             setLocation(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
           }
         } catch (error) {
-          console.error("Error getting location:", error);
+          console.error("Error processing location:", error);
           toast({
             title: "Error",
-            description: "Failed to get your location. Please enter it manually.",
+            description: "Failed to process your location. Please enter it manually.",
             variant: "destructive",
           });
         } finally {
@@ -76,7 +92,7 @@ const BusinessLocationForm: React.FC<BusinessLocationFormProps> = ({ onNext, onB
       },
       {
         enableHighAccuracy: true,
-        timeout: 10000,
+        timeout: 15000, // Increased timeout
         maximumAge: 0
       }
     );
