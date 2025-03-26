@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 interface LogoProps {
   className?: string;
@@ -51,9 +52,12 @@ const LandingHeader: React.FC = () => {
               <Link to="/contact" className="text-gray-700 hover:text-gray-900 transition-colors">
                 Contact Us
               </Link>
-              <Link to="/signin" className="text-gray-700 hover:text-gray-900 transition-colors border-l pl-6 ml-2">
-                Sign in
-              </Link>
+              <div className="flex items-center">
+                <span className="text-gray-900 mx-3 font-medium">|</span>
+                <Link to="/signin" className="text-gray-700 hover:text-gray-900 transition-colors">
+                  Sign in
+                </Link>
+              </div>
             </nav>
             
             <Button 
@@ -89,9 +93,12 @@ const LandingHeader: React.FC = () => {
               <Link to="/contact" className="text-gray-700 hover:text-gray-900 transition-colors">
                 Contact Us
               </Link>
-              <Link to="/signin" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Sign in
-              </Link>
+              <div className="flex items-center py-1">
+                <span className="text-gray-900 mx-2 font-medium">|</span>
+                <Link to="/signin" className="text-gray-700 hover:text-gray-900 transition-colors">
+                  Sign in
+                </Link>
+              </div>
               <Button 
                 asChild 
                 className="w-full text-white bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 rounded-full py-2 px-6 transition-all"
