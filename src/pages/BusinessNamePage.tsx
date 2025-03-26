@@ -27,7 +27,7 @@ const BusinessNamePage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#eee] bg-grid">
+    <div className="min-h-screen flex flex-col bg-black bg-grid">
       <LandingHeader />
       
       <div className="mt-4">
