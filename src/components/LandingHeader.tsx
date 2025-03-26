@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Menu, X } from 'lucide-react';
 
 interface LogoProps {
   className?: string;
@@ -27,8 +28,14 @@ const Logo: React.FC<LogoProps> = ({ className }) => {
 };
 
 const LandingHeader: React.FC = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
-    <header className="w-full py-4 px-8 bg-[#000000] shadow-md">
+    <header className="w-full py-4 px-8 bg-black shadow-md" style={{ backgroundColor: '#000000' }}>
       <div className="max-w-screen-xl mx-auto">
         <div className="flex items-center justify-between">
           <Logo />
@@ -60,15 +67,42 @@ const LandingHeader: React.FC = () => {
           </div>
           
           <div className="md:hidden">
-            <Button variant="ghost" className="text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-menu">
-                <line x1="4" x2="20" y1="12" y2="12"></line>
-                <line x1="4" x2="20" y1="6" y2="6"></line>
-                <line x1="4" x2="20" y1="18" y2="18"></line>
-              </svg>
+            <Button variant="ghost" className="text-white" onClick={toggleMenu}>
+              {isMenuOpen ? (
+                <X size={24} />
+              ) : (
+                <Menu size={24} />
+              )}
             </Button>
           </div>
         </div>
+
+        {isMenuOpen && (
+          <div className="md:hidden mt-4 py-4 bg-black border-t border-gray-800">
+            <nav className="flex flex-col space-y-4">
+              <Link to="/pricing" className="text-white hover:text-gray-300 transition-colors">
+                Pricing
+              </Link>
+              <Link to="/blogs" className="text-white hover:text-gray-300 transition-colors">
+                Blogs
+              </Link>
+              <Link to="/contact" className="text-white hover:text-gray-300 transition-colors">
+                Contact Us
+              </Link>
+              <Link to="/signin" className="text-white hover:text-gray-300 transition-colors">
+                Sign in
+              </Link>
+              <Button 
+                asChild 
+                className="bg-blue-500 hover:bg-blue-600 text-white rounded-full py-2 px-6 w-full mt-2"
+              >
+                <Link to="/register/business-info">
+                  Generate Website
+                </Link>
+              </Button>
+            </nav>
+          </div>
+        )}
       </div>
     </header>
   );
