@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -33,10 +32,12 @@ const INFORMATIVE_KEYWORDS = [
 const BusinessInfoForm: React.FC<BusinessInfoFormProps> = ({ onNext, onBack }) => {
   const [businessType, setBusinessType] = useState('');
   const [websiteType, setWebsiteType] = useState<'unknown' | 'ecommerce' | 'informative'>('unknown');
+  const [showOptions, setShowOptions] = useState(false);
   
   useEffect(() => {
     if (!businessType) {
       setWebsiteType('unknown');
+      setShowOptions(false);
       return;
     }
     
@@ -50,13 +51,18 @@ const BusinessInfoForm: React.FC<BusinessInfoFormProps> = ({ onNext, onBack }) =
     
     if (isEcommerce && !isInformative) {
       setWebsiteType('ecommerce');
+      setShowOptions(true);
     } else if (isInformative && !isEcommerce) {
       setWebsiteType('informative');
+      setShowOptions(true);
     } else if (isEcommerce && isInformative) {
       // If keywords from both categories are detected, prioritize ecommerce
       setWebsiteType('ecommerce');
+      setShowOptions(true);
     } else {
+      // If no keywords are detected, still show options but keep type as unknown
       setWebsiteType('unknown');
+      setShowOptions(true);
     }
   }, [businessType]);
   
@@ -75,6 +81,14 @@ const BusinessInfoForm: React.FC<BusinessInfoFormProps> = ({ onNext, onBack }) =
     // Store the website type in session storage for later use
     if (websiteType !== 'unknown') {
       sessionStorage.setItem('websiteType', websiteType);
+    } else {
+      // If still unknown, default to informative
+      sessionStorage.setItem('websiteType', 'informative');
+      toast({
+        title: "Website type set to default",
+        description: "We've set your website type to informative. You can change this later.",
+        duration: 3000
+      });
     }
     onNext();
   };
@@ -116,10 +130,12 @@ const BusinessInfoForm: React.FC<BusinessInfoFormProps> = ({ onNext, onBack }) =
           )}
         </div>
         
-        {businessType && websiteType !== 'unknown' && (
+        {businessType && showOptions && (
           <div className="mt-6 p-4 bg-gray-50 rounded-lg">
             <p className="text-sm text-gray-700 mb-3">
-              Based on your business type, we think you might need a:
+              {websiteType !== 'unknown' 
+                ? "Based on your business type, we think you might need a:" 
+                : "Please select the type of website you need:"}
             </p>
             
             <div className="flex space-x-3">
@@ -153,7 +169,9 @@ const BusinessInfoForm: React.FC<BusinessInfoFormProps> = ({ onNext, onBack }) =
             <p className="text-xs text-gray-500 mt-3">
               {websiteType === 'ecommerce' 
                 ? "E-commerce website will include product listings, shopping cart, and checkout features."
-                : "Informative website will focus on presenting your content and services clearly to visitors."}
+                : websiteType === 'informative'
+                  ? "Informative website will focus on presenting your content and services clearly to visitors."
+                  : "Select the option that best fits your business needs."}
             </p>
           </div>
         )}
